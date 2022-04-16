@@ -8,11 +8,15 @@ from rclpy.node import Node
 from rclpy.executors import Executor
 from sensor_msgs.msg import Image
 
+from rclpy.executors import Executor
+from sensor_msgs.msg import Image
+
 from std_msgs.msg import Bool
 from std_msgs.msg import UInt8
 from tku_msgs.msg import ColorObjects
 from tku_msgs.msg import Interface
 from tku_msgs.msg import DrawData
+from tku_msgs.msg import HeadPackage
 
 from strategy.strategy import Strategy
 from strategy.imu_node import IMU_node
@@ -62,6 +66,7 @@ class StrategyComm(Node):
         self.strategy.api.sendcontinuousvalue_pub = self.create_publisher(Interface, '/ChangeContinuousValue_Topic', 1)
         self.strategy.api.draw_pub = self.create_publisher(DrawData, '/draw_image', 1)
         
+        self.strategy.api.head_pub = self.create_publisher(HeadPackage, '/package/HeadMotor', 1)
 
 
     def web_start_callback(self, msg):
@@ -84,12 +89,13 @@ class StrategyComm(Node):
         pass
    
     def colormodel_image_callback(self, msg):
-        print('colormodel_image_callback')
+        pass
+        #print('colormodel_image_callback')
         
    
     def object_info_callback(self, msg):
-        print('object_info_callback')
-        self.strategy.main()
+        #print('object_info_callback')
+        self.strategy.main(msg)
             
             
 class PriorityExecutor(Executor):
@@ -116,7 +122,7 @@ class PriorityExecutor(Executor):
                 self.hp_executor.submit(handler)
             else:
                 self.lp_executor.submit(handler)
-    
+             
 
 def main(args=None):
     rclpy.init(args=args)
@@ -137,21 +143,6 @@ def main(args=None):
             imu_node.destroy_node()
     finally:
         rclpy.shutdown()
-    '''strategy_node = StrategyComm()
-    
-    while rclpy.ok():
-        print('in while')
-        rclpy.spin_once(strategy_node)
-        print('in while2')
-        time.sleep(1)'''
-        
-
-    #rclpy.spin(strategy_node)
-
-    #strategy_node.destroy_node()
-
-    #rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()

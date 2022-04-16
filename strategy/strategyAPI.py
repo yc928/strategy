@@ -2,6 +2,7 @@ import rclpy
 
 from tku_msgs.msg import Interface
 from tku_msgs.msg import DrawData
+from tku_msgs.msg import HeadPackage
 
 class StrategyAPI():
     
@@ -29,6 +30,13 @@ class StrategyAPI():
         data.theta = theta
         data.sensor_mode = sensor_mode
         self.sendcontinuousvalue_pub.publish(data)
+        
+    def sendheadvalue(self, head_id, speed, angle):
+        data = HeadPackage()
+        data.id = head_id
+        data.position = angle
+        data.speed = speed
+        self.head_pub.publish(data)
         
     def draw(self, draw_type, xmin, xmax, ymin, ymax, red, green, blue, width):
         data = DrawData()
