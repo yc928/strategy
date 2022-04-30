@@ -4,6 +4,8 @@ from tku_msgs.msg import Interface
 from tku_msgs.msg import DrawData
 from tku_msgs.msg import HeadPackage
 
+from tku_msgs.srv import ExecuteSector
+
 class StrategyAPI():
     
     def __init__(self):      
@@ -37,6 +39,11 @@ class StrategyAPI():
         data.position = angle
         data.speed = speed
         self.head_pub.publish(data)
+        
+    def sendsector(self, sector_id):
+        data = ExecuteSector.Request()
+        data.sector = sector_id
+        self.sendsector_cli.call_async(data)
         
     def draw(self, draw_type, xmin, xmax, ymin, ymax, red, green, blue, width):
         data = DrawData()

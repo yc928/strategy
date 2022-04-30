@@ -18,6 +18,8 @@ from tku_msgs.msg import Interface
 from tku_msgs.msg import DrawData
 from tku_msgs.msg import HeadPackage
 
+from tku_msgs.srv import ExecuteSector
+
 from strategy.strategy import Strategy
 from strategy.imu_node import IMU_node
 
@@ -67,6 +69,9 @@ class StrategyComm(Node):
         self.strategy.api.draw_pub = self.create_publisher(DrawData, '/draw_image', 1)
         
         self.strategy.api.head_pub = self.create_publisher(HeadPackage, '/package/HeadMotor', 1)
+        
+        self.strategy.api.sendsector_cli = self.create_client(ExecuteSector, '/package/ExecuteSector')
+        
 
 
     def web_start_callback(self, msg):
