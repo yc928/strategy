@@ -13,6 +13,7 @@ from sensor_msgs.msg import Image
 
 from std_msgs.msg import Bool
 from std_msgs.msg import UInt8
+from std_msgs.msg import Int8
 from tku_msgs.msg import ColorObjects
 from tku_msgs.msg import Interface
 from tku_msgs.msg import DrawData
@@ -61,6 +62,13 @@ class StrategyComm(Node):
                  self.object_info_callback,
                  1)
         self.object_info_sub
+        
+        self.ballinfo_sub = self.create_subscription(
+                 Int8,
+                 '/Ballinfo',
+                 self.ballinfo_callback,
+                 1)
+        self.ballinfo_sub
               
         self.strategy = Strategy()
         
@@ -69,6 +77,9 @@ class StrategyComm(Node):
         self.strategy.api.draw_pub = self.create_publisher(DrawData, '/draw_image', 1)
         
         self.strategy.api.head_pub = self.create_publisher(HeadPackage, '/package/HeadMotor', 1)
+        
+        # goal keeper
+        #self.strategy.api.ballinfo_pub = self.create_publisher(Int8, '/Ballinfo', 1)
         
         self.strategy.api.sendsector_cli = self.create_client(ExecuteSector, '/package/ExecuteSector')
         
@@ -86,6 +97,9 @@ class StrategyComm(Node):
         self.strategy.sw3 = bool(msg.data & 0x04)
         
 
+        
+    def ballinfo_callback(self, msg):
+        self.strategy.ball_info = msg.data
         
       
     # image

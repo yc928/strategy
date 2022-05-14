@@ -4,6 +4,8 @@ from tku_msgs.msg import Interface
 from tku_msgs.msg import DrawData
 from tku_msgs.msg import HeadPackage
 
+from std_msgs.msg import Int8
+
 from tku_msgs.srv import ExecuteSector
 
 class StrategyAPI():
@@ -44,6 +46,11 @@ class StrategyAPI():
         data = ExecuteSector.Request()
         data.sector = sector_id
         self.sendsector_cli.call_async(data)
+        
+    def sendballinfo(self, ball_info):
+        ball_data = Int8()
+        ball_data.data = ball_info
+        self.ballinfo_pub.publish(ball_data)
         
     def draw(self, draw_type, xmin, xmax, ymin, ymax, red, green, blue, width):
         data = DrawData()
