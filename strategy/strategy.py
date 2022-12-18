@@ -85,7 +85,7 @@ class Strategy():
         if self.start:
             if not self.init_flag:
                 self.init_flag = True
-                self.api.sendbodyauto(self.WALKING_X_OFFSET, self.WALKING_Y_OFFSET, 0, self.WALKING_THETA_OFFSET, 0x01, 0)
+                #self.api.sendbodyauto(self.WALKING_X_OFFSET, self.WALKING_Y_OFFSET, 0, self.WALKING_THETA_OFFSET, 0x01, 0)
                 #self.api.sendsector(1)
                 #self.api.sendcontinuousvalue(1000, 0, 0, 0, 0)
             
@@ -99,29 +99,33 @@ class Strategy():
             #print(IMU.yaw)
             #print('==============')
         #============goal keeper===================
-            '''robot.process(object_info.colorobjects[5].objects, object_info.colorobjects[2].objects)
+            robot.process(object_info.colorobjects[5].objects, object_info.colorobjects[2].objects)
             ball.process(object_info.colorobjects[3].objects)
+            print('robot.detected: {}, ball: {}'.format(robot.detected, ball.detected))
             
             if robot.detected and ball.detected:
                 if robot.x - ball.x > 0:
                     print('ball at left')
-                    self.api.sendballinfo(1)
+                    self.ball_info = 1
+                    #self.api.sendballinfo(1)
                 else:
                     print('ball at right')
-                    self.api.sendballinfo(2)
+                    self.ball_info = 2
+                    #self.api.sendballinfo(2)
             else:
                 print('robot or ball missing')
-                self.api.sendballinfo(0)'''        
+                self.ball_info = 0
+                #self.api.sendballinfo(0)        
          
          #===========attacker=====================
-            ball.process(object_info.colorobjects[3].objects)
+            '''ball.process(object_info.colorobjects[3].objects)
             if ball.detected:
                 print('self ball detected')
                 if self.forwardOK_flag and self.turnOK_flag:
                     self.api.sendcontinuousvalue(self.WALKING_X_OFFSET, self.calc_shift(ball.x), 0, self.WALKING_THETA_OFFSET, 0)
                     #self.calc_shift(ball.x)
                     if self.kick_flag:
-                        self.api.sendbodyauto(0, 0, 0, 0, 0x01, 0)
+                        #self.api.sendbodyauto(0, 0, 0, 0, 0x01, 0)
                         time.sleep(5)
                         print('kick motion')
                         self.api.sendsector(5)
@@ -152,20 +156,20 @@ class Strategy():
                     print('ball right')
                     self.api.sendcontinuousvalue(self.WALKING_X_OFFSET, self.WALKING_Y_OFFSET, 0, self.TURN_RLARGE, 0)
                 else:
-                    print('no robot or ball')
+                    print('no robot or ball')'''
                                    
         else:
-            self.api.sendsector(29)
+            #self.api.sendsector(29)
             self.head_init_flag = True
             self.turnhead_flag = False
             self.forwardOK_flag = False
             self.turnOK_flag = False
             self.shiftOK_flag = False
             self.turnhead_flag = False
-            self.api.sendheadvalue(1, 50, 2048)
-            self.api.sendheadvalue(2, 50, 1700)
+            #self.api.sendheadvalue(1, 50, 2048)
+            #self.api.sendheadvalue(2, 50, 1700)
             if self.init_flag:
-                self.api.sendbodyauto(0, 0, 0, 0, 0x01, 0)
+                #self.api.sendbodyauto(0, 0, 0, 0, 0x01, 0)
                 #self.api.sendsector(2)
                 self.init_flag = False
    

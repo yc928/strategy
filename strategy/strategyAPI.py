@@ -1,4 +1,5 @@
 import rclpy
+import time
 
 from tku_msgs.msg import Interface
 from tku_msgs.msg import DrawData
@@ -36,6 +37,7 @@ class StrategyAPI():
         self.sendcontinuousvalue_pub.publish(data)
         
     def sendheadvalue(self, head_id, speed, angle):
+        print('goal keeper send head')
         data = HeadPackage()
         data.id = head_id
         data.position = angle
@@ -51,6 +53,7 @@ class StrategyAPI():
         ball_data = Int8()
         ball_data.data = ball_info
         self.ballinfo_pub.publish(ball_data)
+        time.sleep(0.03)
         
     def draw(self, draw_type, xmin, xmax, ymin, ymax, red, green, blue, width):
         data = DrawData()

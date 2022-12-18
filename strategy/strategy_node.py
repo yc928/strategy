@@ -20,6 +20,7 @@ from tku_msgs.msg import DrawData
 from tku_msgs.msg import HeadPackage
 
 from tku_msgs.srv import ExecuteSector
+from example_interfaces.srv import AddTwoInts
 
 from strategy.strategy import Strategy
 from strategy.imu_node import IMU_node
@@ -63,12 +64,12 @@ class StrategyComm(Node):
                  1)
         self.object_info_sub
         
-        self.ballinfo_sub = self.create_subscription(
-                 Int8,
-                 '/Ballinfo',
-                 self.ballinfo_callback,
-                 1)
-        self.ballinfo_sub
+        #self.ballinfo_sub = self.create_subscription(
+        #         Int8,
+        #         '/Ballinfo',
+        #         self.ballinfo_callback,
+        #         1)
+        #self.ballinfo_sub
               
         self.strategy = Strategy()
         
@@ -79,11 +80,17 @@ class StrategyComm(Node):
         self.strategy.api.head_pub = self.create_publisher(HeadPackage, '/package/HeadMotor', 1)
         
         # goal keeper
-        #self.strategy.api.ballinfo_pub = self.create_publisher(Int8, '/Ballinfo', 1)
+        self.strategy.api.ballinfo_pub = self.create_publisher(Int8, '/Ballinfo', 10)
         
         self.strategy.api.sendsector_cli = self.create_client(ExecuteSector, '/package/ExecuteSector')
         
+        self.srv = self.create_service(AddTwoInts, '/Ballinfo', self.response_ball_info)
 
+    def response_ball_info(self, request, response):
+        response.sum = self.strategy.ball_info
+        print("response ball info:", response.sum)
+
+        return response
 
     def web_start_callback(self, msg):
         self.strategy.start = msg.data
